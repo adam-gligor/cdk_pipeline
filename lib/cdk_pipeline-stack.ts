@@ -13,7 +13,7 @@ export class CdkPipelineStack extends Stack {
     const modernPipeline = new CodePipeline(this, 'Pipeline', {
       selfMutation: true,
       synth: new ShellStep('Synth', {
-        input: CodePipelineSource.connection('my-org/my-app', 'main', {
+        input: CodePipelineSource.connection('my-org/my-app', 'master', {
           // create the connection manually !
           connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
         }),
