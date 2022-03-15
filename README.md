@@ -21,5 +21,15 @@ npm install -g aws-cdk
 
 cdk init --language typescript
 
-bootstraaping .. no ? 
+create code start connection 
 
+bootstraaping: cdk bootstrap aws://007401537193/eu-central-1
+
+
+## links 
+
+https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html
+
+https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html
+
+https://cdkworkshop.com/20-typescript/20-create-project.html (old)
