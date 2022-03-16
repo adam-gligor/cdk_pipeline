@@ -31,6 +31,8 @@ not ok ... cdk bootstrap aws://007401537193/eu-central-1
 cdk bootstrap --trust=007401537193 --cloudformation-execution-policies=arn:aws:iam::aws:policy/AdministratorAccess aws://007401537193/eu-central-1 --verbose --debug
 
 
+aws sts get-caller-identity
+
 ## links 
 
 https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html
