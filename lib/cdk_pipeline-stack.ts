@@ -113,6 +113,7 @@ class MyServiceStack extends cdk.Stack {
       portMappings: [{ containerPort: 8000 }]
     });
 
+    // see: https://aws.amazon.com/premiumsupport/knowledge-center/ecs-unable-to-pull-secrets/
     const service = new ecs.FargateService(this, 'MyAppService', {
       serviceName: "MyAppService",
       cluster: fargateCluster,
