@@ -51,7 +51,7 @@ class MyApplication extends cdk.Stage {
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    const dbStack = new MyServiceStack(this, 'MyService');
+    const myStack = new MyServiceStack(this, 'MyService');
   }
 }
 
@@ -61,7 +61,7 @@ class MyServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    return
+
     // VPC 
 
 
@@ -123,11 +123,11 @@ class MyServiceStack extends cdk.Stack {
       assignPublicIp: true
     });
 
-    // service.connections.allowFrom(
-    //   ec2.Peer.anyIpv4(),
-    //   ec2.Port.tcp(8000),
-    //   "",
-    // );
+    service.connections.allowFrom(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(8000),
+      "public access",
+    );
 
   }
 
