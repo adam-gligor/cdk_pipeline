@@ -126,7 +126,7 @@ class MyServiceStack extends cdk.Stack {
     service.connections.allowFrom(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(8000),
-      "public access",
+      "public accesss",
     );
 
   }
