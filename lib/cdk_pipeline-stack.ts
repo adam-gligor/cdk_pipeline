@@ -25,7 +25,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
     // CDK pipeline 
 
-    
+
     const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
       selfMutation: true,
       synth: new pipelines.ShellStep('Synth', {
@@ -107,17 +107,17 @@ class MyServiceStack extends cdk.Stack {
     });
 
     taskDefinition.addContainer("myapp", {
-      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,'latest'),
+      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,'1.0.0'),
       portMappings: [{ containerPort: 8000 }]
     });
 
-    // const service = new ecs.FargateService(this, 'MyAppService', {
-    //   serviceName: "MyAppService",
-    //   cluster: fargateCluster,
-    //   taskDefinition: taskDefinition,
-    //   vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT },
-    //   desiredCount: 0
-    // });
+    const service = new ecs.FargateService(this, 'MyAppService', {
+      serviceName: "MyAppService",
+      cluster: fargateCluster,
+      taskDefinition: taskDefinition,
+      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+      desiredCount: 1
+    });
 
   }
 
