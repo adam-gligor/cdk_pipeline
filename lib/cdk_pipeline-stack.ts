@@ -15,7 +15,6 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as pipelines from 'aws-cdk-lib/pipelines'
 
 
-
 // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html
 
 export class CdkPipelineStack extends cdk.Stack {
@@ -55,6 +54,7 @@ class MyApplication extends cdk.Stage {
     const dbStack = new MyServiceStack(this, 'MyService');
   }
 }
+
 
 class MyServiceStack extends cdk.Stack {
 
@@ -100,6 +100,8 @@ class MyServiceStack extends cdk.Stack {
       vpc: vpc,
       clusterName: "MyFargateCluster",
     });
+    fargateCluster.enableFargateCapacityProviders();
+
 
     const taskDefinition = new ecs.FargateTaskDefinition(this, 'MyAppTask', {
       memoryLimitMiB: 512,
@@ -116,7 +118,7 @@ class MyServiceStack extends cdk.Stack {
       cluster: fargateCluster,
       taskDefinition: taskDefinition,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      desiredCount: 1
+      desiredCount: 0
     });
 
   }
