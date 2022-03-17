@@ -29,14 +29,15 @@ export class CdkPipelineStack extends cdk.Stack {
       connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
     });
 
-
-    const synthStep = new pipelines.ShellStep('Synth', {
-      input: githubInput,
-      commands: [
         //'mkdir version && echo 1.0.0 > version/VERSION',
         //'echo $CODEBUILD_RESOLVED_SOURCE_VERSION',
         //"GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
         //`if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
+        
+    const synthStep = new pipelines.ShellStep('Synth', {
+      input: githubInput,
+      commands: [
+
         'npm ci',
         'npm run build',
         'npx cdk synth',
