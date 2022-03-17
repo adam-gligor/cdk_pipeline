@@ -33,8 +33,10 @@ export class CdkPipelineStack extends cdk.Stack {
     const synthStep = new pipelines.ShellStep('Synth', {
       input: githubInput,
       commands: [
-        'mkdir version && echo 1.0.0 > version/VERSION',
-        'ls',
+        //'mkdir version && echo 1.0.0 > version/VERSION',
+        //'ls',
+        "GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
+        `if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
         'npm ci',
         'npm run build',
         'npx cdk synth',
@@ -49,16 +51,16 @@ export class CdkPipelineStack extends cdk.Stack {
 
 
     pipeline.addStage(
-      new MyApplication(this, 'Prod', {
+      new MyApplication(this, 'Deploy', {
         env: props.env,
       }),
       {
-        pre:[
-          new pipelines.ShellStep('version', {
-            input: synthStep.addOutputDirectory('version'),
-            commands: ['cat VERSION'],
-          }),
-        ]
+        // pre:[
+        //   new pipelines.ShellStep('Version', {
+        //     input: synthStep.addOutputDirectory('version'),
+        //     commands: ['cat VERSION'],
+        //   }),
+        // ]
       }
     );
 
@@ -127,8 +129,9 @@ class MyServiceStack extends cdk.Stack {
       cpu: 256
     });
 
+    console.log(`VERSION ${process.env.VERSION}`)
     taskDefinition.addContainer("myapp", {
-      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,'1.0.0'),
+      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,process.env.VERSION),
       portMappings: [{ containerPort: 8000 }]
     });
 
