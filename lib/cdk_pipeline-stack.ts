@@ -56,7 +56,7 @@ export class CdkPipelineStack extends cdk.Stack {
         pre:[
           new pipelines.ShellStep('version', {
             input: synthStep.addOutputDirectory('version'),
-            commands: ['ls'],
+            commands: ['cat VERSION'],
           }),
         ]
       }
