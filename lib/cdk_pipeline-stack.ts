@@ -141,7 +141,7 @@ class MyServiceStack extends cdk.Stack {
       cluster: fargateCluster,
       taskDefinition: taskDefinition,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      desiredCount: 0,
+      desiredCount: 1,
       assignPublicIp: true
     });
 
