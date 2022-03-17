@@ -33,7 +33,7 @@ export class CdkPipelineStack extends cdk.Stack {
           connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
         }),
         commands: [
-          'echo 1.0.0 >> VERSION'
+          'echo 1.0.0 >> VERSION',
           'npm ci',
           'npm run build',
           'npx cdk synth',
