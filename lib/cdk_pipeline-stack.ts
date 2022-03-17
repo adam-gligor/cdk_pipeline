@@ -36,7 +36,7 @@ export class CdkPipelineStack extends cdk.Stack {
         //'mkdir version && echo 1.0.0 > version/VERSION',
         'echo $CODEBUILD_RESOLVED_SOURCE_VERSION',
         "GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
-        `if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
+        //`if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
         'npm ci',
         'npm run build',
         'npx cdk synth',
@@ -131,7 +131,7 @@ class MyServiceStack extends cdk.Stack {
 
     console.log(`VERSION ${process.env.VERSION}`)
     taskDefinition.addContainer("myapp", {
-      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,process.env.VERSION),
+      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,"1.0.0"), //process.env.VERSION),
       portMappings: [{ containerPort: 8000 }]
     });
 
@@ -141,7 +141,7 @@ class MyServiceStack extends cdk.Stack {
       cluster: fargateCluster,
       taskDefinition: taskDefinition,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      desiredCount: 1,
+      desiredCount: 0,
       assignPublicIp: true
     });
 
