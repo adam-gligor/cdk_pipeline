@@ -24,37 +24,42 @@ export class CdkPipelineStack extends cdk.Stack {
 
     // CDK pipeline 
 
+    const githubInput = pipelines.CodePipelineSource.connection('adam-gligor/cdk_pipeline', 'master', {
+      // create the connection manually !
+      connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
+    });
+
+
+    const synthStep = new pipelines.ShellStep('Synth', {
+      input: githubInput,
+      commands: [
+        'mkdir version && echo 1.0.0 > version/VERSION',
+        'npm ci',
+        'npm run build',
+        'npx cdk synth',
+      ],
+    })
+
 
     const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
       selfMutation: true,
-      synth: new pipelines.ShellStep('Synth', {
-        input: pipelines.CodePipelineSource.connection('adam-gligor/cdk_pipeline', 'master', {
-          // create the connection manually !
-          connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
-        }),
-        commands: [
-          'npm ci',
-          'npm run build',
-          'npx cdk synth',
-        ],
-      }),
+      synth: synthStep,
     });    
+
+
     pipeline.addStage(
-      new cdk.Stage(this, 'Version', {
+      new MyApplication(this, 'Prod', {
         env: props.env,
       }),
       {
-        post: [
-          new pipelines.ShellStep('Version', {
-            commands: ['echo 1.0.0 > VERSION'],
+        pre:[
+          new pipelines.ShellStep('Approve', {
+            input: synthStep.addOutputDirectory('version'),
+            commands: ['echo VERSION','cat version/VERSION'],
           }),
-        ],
+        ]
       }
     );
-
-    pipeline.addStage(new MyApplication(this, 'Prod', {
-      env: props.env,
-    }));
 
   }
 }
