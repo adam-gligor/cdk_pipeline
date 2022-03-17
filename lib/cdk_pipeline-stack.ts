@@ -51,7 +51,7 @@ export class CdkPipelineStack extends cdk.Stack {
 
 
     pipeline.addStage(
-      new MyApplication(this, 'Deploy', {
+      new MyApplication(this, 'Prod', {
         env: props.env,
       }),
       {
