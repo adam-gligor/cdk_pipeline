@@ -34,7 +34,7 @@ export class CdkPipelineStack extends cdk.Stack {
       input: githubInput,
       commands: [
         //'mkdir version && echo 1.0.0 > version/VERSION',
-        //'ls',
+        'echo $CODEBUILD_RESOLVED_SOURCE_VERSION',
         "GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
         `if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
         'npm ci',
