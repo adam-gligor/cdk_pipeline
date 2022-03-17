@@ -33,11 +33,11 @@ export class CdkPipelineStack extends cdk.Stack {
         //'echo $CODEBUILD_RESOLVED_SOURCE_VERSION',
         //"GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
         //`if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
-        
+
     const synthStep = new pipelines.ShellStep('Synth', {
       input: githubInput,
       commands: [
-
+        'ls',
         'npm ci',
         'npm run build',
         'npx cdk synth',
