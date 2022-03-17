@@ -34,6 +34,7 @@ export class CdkPipelineStack extends cdk.Stack {
       input: githubInput,
       commands: [
         'mkdir version && echo 1.0.0 > version/VERSION',
+        'ls',
         'npm ci',
         'npm run build',
         'npx cdk synth',
@@ -53,9 +54,9 @@ export class CdkPipelineStack extends cdk.Stack {
       }),
       {
         pre:[
-          new pipelines.ShellStep('Approve', {
+          new pipelines.ShellStep('version', {
             input: synthStep.addOutputDirectory('version'),
-            commands: ['echo VERSION','cat version/VERSION'],
+            commands: ['ls'],
           }),
         ]
       }
