@@ -22,7 +22,7 @@ export class CdkPipelineStack extends cdk.Stack {
     super(scope, id, props);
 
 
-    // CDK pipeline 
+    // CDK pipelinex
 
     const githubInput = pipelines.CodePipelineSource.connection('adam-gligor/cdk_pipeline', 'master', {
       // create the connection manually !
