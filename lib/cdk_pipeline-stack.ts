@@ -1,10 +1,4 @@
-// import { Stack, StackProps, Stage, StageProps } from 'aws-cdk-lib';
-// import { CodePipeline, ShellStep, CodePipelineSource } from "aws-cdk-lib/pipelines";
-
 import { Construct } from 'constructs';
-// // import * as cdk from "@aws-cdk/core";
-// import { Cluster, FargateTaskDefinition } from "aws-cdk-lib/aws-ecs";
-// import { Vpc } from "aws-cdk-lib/aws-ec2";
 
 import * as cdk from 'aws-cdk-lib'
 import * as iam from 'aws-cdk-lib/aws-iam'
@@ -15,29 +9,38 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as pipelines from 'aws-cdk-lib/pipelines'
 
 
-// https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html
+interface PipelineStackProps extends cdk.StackProps {
+  pipelineSourceBranch: string;
+  ecsImageTag: string
+}
+
+interface MyApplicationProps extends cdk.StageProps {
+  ecsImageTag: string
+}
+
+interface MyServiceProps extends cdk.StackProps {
+  ecsImageTag: string
+}
+
+
 
 export class CdkPipelineStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
 
 
-    // CDK pipelinex
+    // CDK pipeline
 
-    const githubInput = pipelines.CodePipelineSource.connection('adam-gligor/cdk_pipeline', 'master', {
+
+    const githubInput = pipelines.CodePipelineSource.connection('adam-gligor/cdk_pipeline', props.pipelineSourceBranch, {
       // create the connection manually !
       connectionArn: 'arn:aws:codestar-connections:eu-central-1:007401537193:connection/7cb5f54e-88ad-46b2-992f-316b1aba99c1', 
     });
 
-        //'mkdir version && echo 1.0.0 > version/VERSION',
-        //'echo $CODEBUILD_RESOLVED_SOURCE_VERSION',
-        //"GIT_TAG=$(git tag --points-at $CODEBUILD_RESOLVED_SOURCE_VERSION)",
-        //`if [ -n "$GIT_TAG" ]; then export VERSION=$GIT_TAG; else export VERSION="latest"; fi`,
-
     const synthStep = new pipelines.ShellStep('Synth', {
       input: githubInput,
       commands: [
-        'ls',
+        //'ls',
         'npm ci',
         'npm run build',
         'npx cdk synth',
@@ -52,8 +55,9 @@ export class CdkPipelineStack extends cdk.Stack {
 
 
     pipeline.addStage(
-      new MyApplication(this, 'Prod', {
+      new MyApplication(this, 'Deploy', {
         env: props.env,
+        ecsImageTag: props.ecsImageTag
       }),
       {
         // pre:[
@@ -70,17 +74,17 @@ export class CdkPipelineStack extends cdk.Stack {
 
 
 class MyApplication extends cdk.Stage {
-  constructor(scope: Construct, id: string, props?: cdk.StageProps) {
+  constructor(scope: Construct, id: string, props: MyApplicationProps) {
     super(scope, id, props);
 
-    const myStack = new MyServiceStack(this, 'MyService');
+    const myStack = new MyServiceStack(this, 'MyService', {ecsImageTag: props.ecsImageTag});
   }
 }
 
 
 class MyServiceStack extends cdk.Stack {
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: MyServiceProps) {
     super(scope, id, props);
 
 
@@ -130,9 +134,10 @@ class MyServiceStack extends cdk.Stack {
       cpu: 256
     });
 
-    console.log(`VERSION ${process.env.VERSION}`)
+    console.log(`ecsImageTag ${props.ecsImageTag}`)
+
     taskDefinition.addContainer("myapp", {
-      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,"1.0.0"), //process.env.VERSION),
+      image: ecs.ContainerImage.fromEcrRepository(ecrRepo,props.ecsImageTag),
       portMappings: [{ containerPort: 8000 }]
     });
 

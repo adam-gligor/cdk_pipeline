@@ -16,6 +16,13 @@ new CdkPipelineStack(app, 'CdkPipelineStack', {
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
   env: { account: '007401537193', region: 'eu-central-1' },
-
+  pipelineSourceBranch: "develop",
+  ecsImageTag: "develop"
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+});
+
+new CdkPipelineStack(app, 'CdkPipelineStackProd', {
+  env: { account: '007401537193', region: 'eu-central-1' },
+  pipelineSourceBranch: "master",
+  ecsImageTag: "1.0.0"
 });
