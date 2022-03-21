@@ -30,8 +30,9 @@ new CdkPipelineStack(app, 'StagingPipeline', {
 });
 
 
-// new CdkPipelineStack(app, 'CdkPipelineStackProd', {
-//   env: { account: '007401537193', region: 'eu-central-1' },
-//   pipelineSourceBranch: "master",
-//   ecsImageTag: "1.0.0"
-// });
+new CdkPipelineStack(app, 'ProductionPipeline', {
+  env: { account: '007401537193', region: 'eu-central-1' },
+  pipelineSourceBranch: "master",
+  ecsImageTag: "1.0.0",
+  environment: "production"
+});

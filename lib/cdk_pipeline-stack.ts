@@ -70,7 +70,7 @@ class MyApplication extends cdk.Stage {
   constructor(scope: Construct, id: string, props: MyApplicationProps) {
     super(scope, id, props);
 
-    new ServiceStack(this, 'MyService', {
+    new ServiceStack(this, `MyService-${props.environment}`, {
       ecsImageTag: props.ecsImageTag, environment: props.environment
     });
   }
