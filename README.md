@@ -15,21 +15,29 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ## setup 
 
-npm install -g aws-cdk
+install nvm 
 
-.. just a cli, ok to install globally
+install cdk  `npm install -g aws-cdk` it's just a cli, ok to install globally
 
-cdk init --language typescript
+initial proj setup `cdk init --language typescript`
 
-create code start connection 
+create code start connection manually in console
 
-bootstraaping: 
+bootstrap
 
-not ok ... cdk bootstrap aws://007401537193/eu-central-1
-
-
+```
 cdk bootstrap --trust=007401537193 --cloudformation-execution-policies=arn:aws:iam::aws:policy/AdministratorAccess aws://007401537193/eu-central-1 --verbose --debug
+```
+the default `cdk bootstrap aws://007401537193/eu-central-1` is not enough !
 
+
+## build & deploy 
+
+npm run cdk synth EcsStack
+
+npm run cdk deploy EcsStack
+
+## other
 
 aws sts get-caller-identity
 

@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { CdkPipelineStack } from '../lib/cdk_pipeline-stack';
+import { CdkPipelineStack  } from '../lib/cdk_pipeline-stack';
+import { EcsStack  } from '../lib/ecs-stack';
 
 const app = new cdk.App();
-new CdkPipelineStack(app, 'CdkPipelineStack', {
+
+new EcsStack(app, 'EcsStack', {
+  env: { account: '007401537193', region: 'eu-central-1' },
+});
+
+
+new CdkPipelineStack(app, 'StagingPipeline', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -21,8 +28,9 @@ new CdkPipelineStack(app, 'CdkPipelineStack', {
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
-new CdkPipelineStack(app, 'CdkPipelineStackProd', {
-  env: { account: '007401537193', region: 'eu-central-1' },
-  pipelineSourceBranch: "master",
-  ecsImageTag: "1.0.0"
-});
+
+// new CdkPipelineStack(app, 'CdkPipelineStackProd', {
+//   env: { account: '007401537193', region: 'eu-central-1' },
+//   pipelineSourceBranch: "master",
+//   ecsImageTag: "1.0.0"
+// });
