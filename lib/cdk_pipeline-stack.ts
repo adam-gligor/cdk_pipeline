@@ -1,23 +1,18 @@
 import { Construct } from 'constructs';
-
 import * as cdk from 'aws-cdk-lib'
-import * as iam from 'aws-cdk-lib/aws-iam'
-
-import * as ecr from 'aws-cdk-lib/aws-ecr'
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as pipelines from 'aws-cdk-lib/pipelines'
-
 import { ServiceStack } from '../lib/service-stack';
 
 
 interface PipelineStackProps extends cdk.StackProps {
   pipelineSourceBranch: string;
   ecsImageTag: string
+  environment: string
 }
 
 interface MyApplicationProps extends cdk.StageProps {
   ecsImageTag: string
+  environment: string
 }
 
 
@@ -54,7 +49,8 @@ export class CdkPipelineStack extends cdk.Stack {
     pipeline.addStage(
       new MyApplication(this, 'Deploy', {
         env: props.env,
-        ecsImageTag: props.ecsImageTag
+        ecsImageTag: props.ecsImageTag,
+        environment: props.environment
       }),
       {
         // pre:[
@@ -74,6 +70,8 @@ class MyApplication extends cdk.Stage {
   constructor(scope: Construct, id: string, props: MyApplicationProps) {
     super(scope, id, props);
 
-    new ServiceStack(this, 'MyService', {ecsImageTag: props.ecsImageTag});
+    new ServiceStack(this, 'MyService', {
+      ecsImageTag: props.ecsImageTag, environment: props.environment
+    });
   }
 }

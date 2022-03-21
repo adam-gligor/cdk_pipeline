@@ -10,6 +10,7 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 
 interface ServiceStackProps extends cdk.StackProps {
   ecsImageTag: string
+  environment: string
 }
 
 
@@ -25,10 +26,17 @@ export class ServiceStack extends cdk.Stack {
     const vpc = ec2.Vpc.fromLookup(this, "VPC", {isDefault: true})
 
 
+    // ECR 
+
+
     const ecrRepo = ecr.Repository.fromRepositoryAttributes(this, "MyRepository", {
         repositoryArn: cdk.Fn.importValue("OutputECRRepositoryArn"),
         repositoryName: cdk.Fn.importValue("OutputECRRepositoryName"),
     });
+
+
+    // Fargate cluster
+
 
     const fargateCluster = ecs.Cluster.fromClusterAttributes(this, "MyFargateCluster", {
       clusterName: cdk.Fn.importValue("MyFargateCluster"),
@@ -37,7 +45,10 @@ export class ServiceStack extends cdk.Stack {
     });
     
 
-    const taskDefinition = new ecs.FargateTaskDefinition(this, 'MyAppTask', {
+    // ECS task
+
+
+    const taskDefinition = new ecs.FargateTaskDefinition(this, `MyAppTask-${props.environment}`, {
       memoryLimitMiB: 512,
       cpu: 256
     });
@@ -49,9 +60,13 @@ export class ServiceStack extends cdk.Stack {
       portMappings: [{ containerPort: 8000 }]
     });
 
+
+    // ECS service 
+
+
     // xsee: https://aws.amazon.com/premiumsupport/knowledge-center/ecs-unable-to-pull-secrets/
-    const service = new ecs.FargateService(this, 'MyAppService', {
-      serviceName: "MyAppService",
+    const service = new ecs.FargateService(this, `MyAppService-${props.environment}`, {
+      serviceName: `MyAppService-${props.environment}`,
       cluster: fargateCluster,
       taskDefinition: taskDefinition,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
@@ -62,10 +77,8 @@ export class ServiceStack extends cdk.Stack {
     service.connections.allowFrom(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(8000),
-      "public accesss",
+      "web access",
     );
-
   }
-
 
 }

@@ -24,7 +24,8 @@ new CdkPipelineStack(app, 'StagingPipeline', {
    * want to deploy the stack to. */
   env: { account: '007401537193', region: 'eu-central-1' },
   pipelineSourceBranch: "develop",
-  ecsImageTag: "develop"
+  ecsImageTag: "develop",
+  environment: "staging"
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
