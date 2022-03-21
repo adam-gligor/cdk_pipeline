@@ -64,12 +64,6 @@ export class EcsStack extends cdk.Stack {
     });
   
 
-    new cdk.CfnOutput(this, "OutputMyFargateCluster", {
-        description: "My Fargate Cluster",
-        exportName: "OutputMyFargateCluster",
-        value: fargateCluster.clusterName,
-    });
-
     new cdk.CfnOutput(this, "OutputECRRepository", {
         description: "My ECR Repo",
         exportName: "OutputECRRepository",
