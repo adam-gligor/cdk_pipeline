@@ -39,7 +39,7 @@ export class ServiceStack extends cdk.Stack {
 
 
     const fargateCluster = ecs.Cluster.fromClusterAttributes(this, "MyFargateCluster", {
-      clusterName: cdk.Fn.importValue("MyFargateCluster"),
+      clusterName: cdk.Fn.importValue("OutputMyFargateCluster"),
       securityGroups: [],
       vpc: vpc,
     });
