@@ -40,7 +40,7 @@ export class CdkPipelineStack extends cdk.Stack {
     })
 
 
-    const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
+    const pipeline = new pipelines.CodePipeline(this, `Pipeline-${props.environment}`, {
       selfMutation: true,
       synth: synthStep,
     });    

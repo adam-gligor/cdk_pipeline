@@ -33,9 +33,20 @@ the default `cdk bootstrap aws://007401537193/eu-central-1` is not enough !
 
 ## build & deploy 
 
-npm run cdk synth EcsStack
+A. deploy the ECS stack separately 
 
+```
+npm run cdk synth EcsStack
 npm run cdk deploy EcsStack
+```
+
+B. deploy / bootstrap the pipelines 
+
+```
+npm run cdk synth StagingPipeline, ProductionPipeline
+npm run cdk deploy StagingPipeline, ProductionPipeline
+```
+
 
 ## other
 

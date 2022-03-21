@@ -20,13 +20,13 @@ export class ServiceStack extends cdk.Stack {
     super(scope, id, props);
 
 
-    // VPC 
+    // import VPC 
 
 
     const vpc = ec2.Vpc.fromLookup(this, "VPC", {isDefault: true})
 
 
-    // ECR 
+    // import ECR 
 
 
     const ecrRepo = ecr.Repository.fromRepositoryAttributes(this, "MyRepository", {
@@ -35,7 +35,7 @@ export class ServiceStack extends cdk.Stack {
     });
 
 
-    // Fargate cluster
+    // import Fargate cluster
 
 
     const fargateCluster = ecs.Cluster.fromClusterAttributes(this, "MyFargateCluster", {
@@ -45,7 +45,7 @@ export class ServiceStack extends cdk.Stack {
     });
     
 
-    // ECS task
+    // define ECS task
 
 
     const taskDefinition = new ecs.FargateTaskDefinition(this, `MyAppTask-${props.environment}`, {
@@ -61,7 +61,7 @@ export class ServiceStack extends cdk.Stack {
     });
 
 
-    // ECS service 
+    // define ECS service 
 
 
     // xsee: https://aws.amazon.com/premiumsupport/knowledge-center/ecs-unable-to-pull-secrets/
