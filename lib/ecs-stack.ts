@@ -64,11 +64,18 @@ export class EcsStack extends cdk.Stack {
     });
   
 
-    new cdk.CfnOutput(this, "OutputECRRepository", {
-        description: "My ECR Repo",
-        exportName: "OutputECRRepository",
-        value: ecrRepo.repositoryUri,
+    new cdk.CfnOutput(this, "OutputECRRepositoryArn", {
+        description: "My ECR Repo Arn",
+        exportName: "OutputECRRepositoryArn",
+        value: ecrRepo.repositoryArn,
     });
+
+    new cdk.CfnOutput(this, "OutputECRRepositoryName", {
+        description: "My ECR Repo Name",
+        exportName: "OutputECRRepositoryName",
+        value: ecrRepo.repositoryName,
+    });
+
 
   }
 }
