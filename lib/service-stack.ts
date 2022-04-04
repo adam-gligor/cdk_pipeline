@@ -70,7 +70,7 @@ export class ServiceStack extends cdk.Stack {
       cluster: fargateCluster,
       taskDefinition: taskDefinition,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      desiredCount: 1,
+      desiredCount: 0,
       assignPublicIp: true
     });
 

@@ -52,6 +52,26 @@ npm run cdk deploy StagingPipeline, ProductionPipeline
 
 aws sts get-caller-identity
 
+
+## workflow 
+
+*staging service deploy automatically from develop*
+
+build push image to ecr (:develop)
+
+aws ecs update-service --cluster MyFargateCluster --service MyAppService-staging --force-new-deployment
+
+
+*feature branch deploy manually*
+
+
+in infra project change image name for staging pipeline
+
+
+*production deploy manually*
+
+in infra project change image name for production pipeline
+
 ## links 
 
 https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html
@@ -59,3 +79,5 @@ https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html
 https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.pipelines-readme.html
 
 https://cdkworkshop.com/20-typescript/20-create-project.html (old)
+
+https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecs/update-service.html
